@@ -7,10 +7,8 @@ struct CityNames {
 
 class WeatherService {
     
-    
     private let baseUrl = "api.openweathermap.org/data/2.5/"
     private let appid = "0058adaff3893eb760cbbf2c877c6e7d"
-    
     
     private func makeUrl(_ method: String, parameter: [URLQueryItem]) -> URL? {
         var component = URLComponents()
@@ -55,4 +53,30 @@ class WeatherService {
         task.resume()
     }
     
+}
+
+extension UIImageView {
+    func setImage(_ iconName: String?) {
+        guard let iconName = iconName else {
+            image = nil
+            return
+        }
+        setImage(URL(string: "https://openweathermap.org/img/wn/\(iconName)@2x.png"))
+    }
+    func setImage(_ url: URL?) {
+        guard let url = url else {
+            image = nil
+            return
+        }
+        let downloadTask = URLSession.shared.dataTask(with: url) { [weak self] data, repsonse, error in
+            DispatchQueue.main.async {
+                if let data = data {
+                    self?.image = UIImage(data: data)
+                } else {
+                    self?.image = nil
+                }
+            }
+        }
+        downloadTask.resume()
+    }
 }

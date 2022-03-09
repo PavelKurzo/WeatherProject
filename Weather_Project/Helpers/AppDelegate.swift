@@ -1,9 +1,3 @@
-//
-//  AppDelegate.swift
-//  Weather_Project
-//
-//  Created by Павел Курзо on 2.02.22.
-//
 
 import UIKit
 

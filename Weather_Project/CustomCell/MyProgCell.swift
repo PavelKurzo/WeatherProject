@@ -1,9 +1,3 @@
-//
-//  MyProgCell.swift
-//  Weather_Project
-//
-//  Created by Павел Курзо on 2.02.22.
-//
 
 import UIKit
 
@@ -45,7 +39,7 @@ class MyProgCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         deleteLabel2.textColor = UIColor.white
         self.insertSubview(deleteLabel2, belowSubview: self.contentView)
         
-        pan = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        pan = UIPanGestureRecognizer(target: self, action: #selector(doOnPan(_:)))
         pan.delegate = self
         self.addGestureRecognizer(pan)
     }
@@ -68,7 +62,7 @@ class MyProgCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         
     }
     
-    @objc func onPan(_ pan: UIPanGestureRecognizer) {
+    @objc func doOnPan(_ pan: UIPanGestureRecognizer) {
         if pan.state == UIGestureRecognizer.State.began {
             
         } else if pan.state == UIGestureRecognizer.State.changed {
@@ -77,7 +71,7 @@ class MyProgCell: UICollectionViewCell, UIGestureRecognizerDelegate {
             if abs(pan.velocity(in: self).x) > 500 {
                 let collectionView: UICollectionView = self.superview as! UICollectionView
                 let indexPath: IndexPath = collectionView.indexPathForItem(at: self.center)!
-                collectionView.delegate?.collectionView!(collectionView, performAction: #selector(onPan(_:)), forItemAt: indexPath, withSender: nil)
+                collectionView.delegate?.collectionView!(collectionView, performAction: #selector(doOnPan(_:)), forItemAt: indexPath, withSender: nil)
             } else {
                 UIView.animate(withDuration: 0.2, animations: {
                     self.setNeedsLayout()

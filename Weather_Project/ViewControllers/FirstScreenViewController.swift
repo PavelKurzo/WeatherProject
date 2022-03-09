@@ -1,5 +1,4 @@
 
-
 import UIKit
 
 class ViewController: UIViewController {
@@ -7,12 +6,9 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var nameForCityTextField: UITextField!
-    @IBOutlet weak var addingButton: UIButton!
-    
     
     private lazy var refreshControl = UIRefreshControl()
     private lazy var collectionDataSource = CollectionDataSource()
-    var value: WeatherResponseData?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,23 +25,26 @@ class ViewController: UIViewController {
         
         
     }
-    @IBAction func addingButton(_ sender: Any) {
+    @IBAction func doOnTouchAddingButton(_ sender: Any) {
+        self.collectionView.reloadData()
         
-        if let InputCityName = nameForCityTextField.text, InputCityName.isEmpty == false {
-            collectionDataSource.cities.append(CityNames(cityName: InputCityName))
+        if let inputCityName = nameForCityTextField.text, inputCityName.isEmpty == false {
+            collectionDataSource.cities.append(CityNames(cityName: inputCityName))
         }
+
         nameForCityTextField.text = nil
         
         for cities in collectionDataSource.cities {
             
             collectionDataSource.weatherService.requestWeather(city: CityNames(cityName: "\(cities)")) { [ weak self] json, response in
-                self?.collectionView.reloadData()
+                    
+                }
             }
             
         }
-    }
     
-    @IBAction func InfoButton(_ sender: Any) {
+    
+    @IBAction func infoButton(_ sender: Any) {
         let alertViewController = UIAlertController(
             title: "Info",
             message: "To delete cell swipe left or rigth",
@@ -68,7 +67,7 @@ class ViewController: UIViewController {
     }
     
     @objc private func handlePullToRefresh(_ sender: UIRefreshControl, _ indexPath: IndexPath) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             sender.endRefreshing()
             self.collectionView.reloadData()
             
@@ -76,8 +75,8 @@ class ViewController: UIViewController {
     }
     func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
         
-        collectionDataSource.cities.remove(at: indexPath.row)
         collectionView.performBatchUpdates({
+            collectionDataSource.removeDataFromCell(indexPath)
             self.collectionView.deleteItems(at: [indexPath])
         })
     }
@@ -91,20 +90,11 @@ class ViewController: UIViewController {
 extension ViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        collectionView.reloadItems(at: [indexPath])
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let SecondViewController = storyBoard.instantiateViewController(withIdentifier: "SecondViewController") as! SecondViewController
-        value = collectionDataSource.weatherDataDictionary[indexPath]
-        SecondViewController.longtitude = value?.coordLong ?? 0.0
-        SecondViewController.lantitude = value?.coordLat ?? 0.0
-        SecondViewController.tempMax = value?.temp_max ?? 0.0
-        SecondViewController.tempMin = value?.temp_min ?? 0.0
-        SecondViewController.cityName = value?.nameOfTheCity ?? ""
-        SecondViewController.humidity = value?.humidity ?? 0
-        SecondViewController.cityTemprature = value?.temp ?? 0.0
-        SecondViewController.feelsLike = value?.feels_like ?? 0.0
+        SecondViewController.dataFromApii = collectionDataSource.weatherDataDictionary[indexPath]
         self.present(SecondViewController, animated: true, completion:nil)
+        
         
     }
 }
@@ -112,9 +102,9 @@ extension ViewController: UICollectionViewDelegate {
 extension ViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        return CGSize(width: view.frame.width - 25, height: view.frame.maxY / 7)
-        
+
+        return CGSize(width: view.frame.width - 25, height: view.frame.maxY / 8)
+
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         
@@ -123,6 +113,21 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         
         return CGFloat(10)
+    }
+}
+
+extension UIView {
+    func setGradient(for view: UIView, _ firstColor: UIColor, _ secondColor: UIColor)  {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [
+            firstColor.cgColor,
+            secondColor.cgColor
+        ]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.frame = view.bounds
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0.9, y: 0.9)
+        view.layer.insertSublayer(gradientLayer, at: 0)
     }
 }
 

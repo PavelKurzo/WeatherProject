@@ -1,5 +1,4 @@
 
-
 import UIKit
 
 struct WeatherResponseData {
@@ -29,8 +28,10 @@ class CollectionDataSource: NSObject, UICollectionViewDataSource {
         CityNames(cityName: "Moscow"),
         CityNames(cityName: "Berlin")
     ]
-    func request(_ indexPath: IndexPath) {
-        weatherService.requestWeather(city: cities[indexPath.row]) { [ weak self] json, response in }
+    
+    func removeDataFromCell(_ indexPath: IndexPath) {
+        
+        cities.remove(at: indexPath.row)
     }
     
     private func createLayout() -> UICollectionViewLayout {
@@ -68,9 +69,7 @@ class CollectionDataSource: NSObject, UICollectionViewDataSource {
                 
                 self?.weatherDataDictionary[indexPath] =
                 WeatherResponseData.init(coordLong: response.coord.lon, coordLat: response.coord.lat, nameOfTheCity: response.name, temp: response.main.temp, temp_min: response.main.temp_min, temp_max: response.main.temp_max, humidity: response.main.humidity, feels_like: response.main.feels_like)
-                
             }
-            
         }
         return cell
     }

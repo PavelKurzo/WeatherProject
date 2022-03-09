@@ -1,5 +1,4 @@
 
-
 import UIKit
 import CoreLocation
 import MapKit
@@ -16,34 +15,41 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var tempMaxLabel: UILabel!
     @IBOutlet weak var tempMinLabel: UILabel!
     @IBOutlet weak var backMenuButton: UIButton!
+    var dataFromApii: WeatherResponseData?
     
-    var cityTemprature: Double = 0.0
-    var humidity: Int = 0
-    var feelsLike: Double = 0.0
-    var cityName: String = ""
-    var longtitude: Double = 0.0
-    var lantitude: Double = 0.0
-    var tempMin: Double = 0.0
-    var tempMax: Double = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.setGradient(for: view, .systemCyan, .white)
         mapView.pinToEdges(view)
         configureMap()
         configureLabels()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(returnToPreviousScreen))
+        backMenuButton.addGestureRecognizer(tap)
     }
+    
+    @objc func returnToPreviousScreen() {
+        if let nav = self.navigationController {
+            nav.popViewController(animated: true)
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
     private func configureLabels() {
-        tempMaxLabel.text = "Max temp \(tempMax) °C"
-        tempMinLabel.text = "Min temp \(tempMin) °C"
-        feelsLikeLabel.text = "Feels like \(feelsLike) °C"
-        cityNameLabel.text = "\(cityName)"
-        cityTemptaruteLabel.text = "\(cityTemprature)°C"
-        humidityLabel.text = "Humidity \(humidity) %"
+        
+        tempMaxLabel.text = "Max temp \(dataFromApii?.temp_max ?? 0.0) °C"
+        tempMinLabel.text = "Min temp \(dataFromApii?.temp_min ?? 0.0) °C"
+        feelsLikeLabel.text = "Feels like \(dataFromApii?.feels_like ?? 0) °C"
+        cityNameLabel.text = "\(dataFromApii?.nameOfTheCity ?? "Api Error")"
+        cityTemptaruteLabel.text = "\(dataFromApii?.temp ?? 0.0) °C"
+        humidityLabel.text = "Humidity \(dataFromApii?.humidity ?? 0) %"
     }
     
     private func configureMap() {
+        
         mapView.showsUserLocation = true
-        let coordinate = CLLocationCoordinate2DMake(lantitude, longtitude)
+        let coordinate = CLLocationCoordinate2DMake(dataFromApii?.coordLat ?? 0.0, dataFromApii?.coordLong ?? 0.0)
         let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
         mapView.setRegion(region, animated: true)
