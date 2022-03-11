@@ -37,11 +37,11 @@ class ViewController: UIViewController {
         for cities in collectionDataSource.cities {
             
             collectionDataSource.weatherService.requestWeather(city: CityNames(cityName: "\(cities)")) { [ weak self] json, response in
-                    
-                }
+                
             }
-            
         }
+        
+    }
     
     
     @IBAction func infoButton(_ sender: Any) {
@@ -102,9 +102,9 @@ extension ViewController: UICollectionViewDelegate {
 extension ViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
+        
         return CGSize(width: view.frame.width - 25, height: view.frame.maxY / 8)
-
+        
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         

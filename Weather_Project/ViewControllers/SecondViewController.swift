@@ -39,11 +39,29 @@ class SecondViewController: UIViewController {
     private func configureLabels() {
         
         tempMaxLabel.text = "Max temp \(dataFromApii?.temp_max ?? 0.0) °C"
+        tempMaxLabel.changeLabelColor()
         tempMinLabel.text = "Min temp \(dataFromApii?.temp_min ?? 0.0) °C"
+        tempMinLabel.changeLabelColor()
         feelsLikeLabel.text = "Feels like \(dataFromApii?.feels_like ?? 0) °C"
+        feelsLikeLabel.changeLabelColor()
+        humidityLabel.text = "Humidity \(dataFromApii?.humidity ?? 0) %"
+        humidityLabel.changeLabelColor()
         cityNameLabel.text = "\(dataFromApii?.nameOfTheCity ?? "Api Error")"
         cityTemptaruteLabel.text = "\(dataFromApii?.temp ?? 0.0) °C"
-        humidityLabel.text = "Humidity \(dataFromApii?.humidity ?? 0) %"
+        
+    }
+    
+    @IBAction func infoButtonSecondScreen(_ sender: Any) {
+        let alertViewController = UIAlertController(
+            title: "Info",
+            message: "You can scroll down weather parameters",
+            preferredStyle: .alert
+        )
+        alertViewController.addAction(
+            UIAlertAction(title: "Ok", style: .default, handler: { _ in print(#function) })
+        )
+        present(alertViewController, animated: true, completion: nil)
+        
     }
     
     private func configureMap() {
@@ -77,10 +95,17 @@ extension UIView {
                 rightAnchor.constraint(equalTo: view.rightAnchor),
             ]
         )
-        
+       
     }
     
 }
+extension UILabel {
+    
+    func changeLabelColor() {
+        backgroundColor = UIColor(white: 0.6, alpha: 0.2)
+        }
+}
+
 extension SecondViewController: CLLocationManagerDelegate {
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

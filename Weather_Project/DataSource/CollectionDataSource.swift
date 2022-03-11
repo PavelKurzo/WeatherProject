@@ -2,6 +2,7 @@
 import UIKit
 
 struct WeatherResponseData {
+
     let coordLong: Double
     let coordLat: Double
     var nameOfTheCity: String
@@ -10,7 +11,7 @@ struct WeatherResponseData {
     let temp_max: Double
     let humidity: Int
     let feels_like: Double
-    
+
 }
 
 class CollectionDataSource: NSObject, UICollectionViewDataSource {
@@ -67,8 +68,8 @@ class CollectionDataSource: NSObject, UICollectionViewDataSource {
                 cell.locationLabel.text = response.name
                 cell.iconImageView.setImage(response.weather.first?.icon)
                 
-                self?.weatherDataDictionary[indexPath] =
-                WeatherResponseData.init(coordLong: response.coord.lon, coordLat: response.coord.lat, nameOfTheCity: response.name, temp: response.main.temp, temp_min: response.main.temp_min, temp_max: response.main.temp_max, humidity: response.main.humidity, feels_like: response.main.feels_like)
+                self?.weatherDataDictionary[indexPath] = WeatherResponseData.init(coordLong: response.coord.lon, coordLat: response.coord.lat, nameOfTheCity: response.name, temp: response.main.temp, temp_min: response.main.temp_min, temp_max: response.main.temp_max, humidity: response.main.humidity, feels_like: response.main.feels_like)
+                
             }
         }
         return cell
