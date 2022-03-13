@@ -85,7 +85,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="info.circle" catalog="system"/>
                                 <connections>
-                                    <action selector="infoButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2SE-nt-QWA"/>
+                                    <action selector="showDeleteAlert:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ikS-cy-518"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Write name of the city" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nlg-T1-y6f">
@@ -231,7 +231,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="info.circle" catalog="system"/>
                                 <connections>
-                                    <action selector="infoButtonSecondScreen:" destination="MzW-Ia-sqQ" eventType="touchUpInside" id="eIE-XU-6D4"/>
+                                    <action selector="showInfoAlert:" destination="MzW-Ia-sqQ" eventType="touchUpInside" id="s5a-vS-RfJ"/>
                                 </connections>
                             </button>
                         </subviews>

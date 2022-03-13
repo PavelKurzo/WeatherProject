@@ -1,8 +1,9 @@
 
 import UIKit
 
-struct WeatherResponseData {
 
+struct WeatherResponseData {
+    
     let coordLong: Double
     let coordLat: Double
     var nameOfTheCity: String
@@ -11,14 +12,12 @@ struct WeatherResponseData {
     let temp_max: Double
     let humidity: Int
     let feels_like: Double
-
 }
 
 class CollectionDataSource: NSObject, UICollectionViewDataSource {
     
     var weatherDataDictionary: [IndexPath : WeatherResponseData] = [:]
     var weatherService = WeatherService()
-    
     var cities: [CityNames] = [
         CityNames(cityName: "Warsaw"),
         CityNames(cityName: "London"),
@@ -31,7 +30,6 @@ class CollectionDataSource: NSObject, UICollectionViewDataSource {
     ]
     
     func removeDataFromCell(_ indexPath: IndexPath) {
-        
         cities.remove(at: indexPath.row)
     }
     
@@ -46,13 +44,13 @@ class CollectionDataSource: NSObject, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         return cities.count
     }
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        
         return 1
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "myCell", for: indexPath)
         
@@ -69,7 +67,6 @@ class CollectionDataSource: NSObject, UICollectionViewDataSource {
                 cell.iconImageView.setImage(response.weather.first?.icon)
                 
                 self?.weatherDataDictionary[indexPath] = WeatherResponseData.init(coordLong: response.coord.lon, coordLat: response.coord.lat, nameOfTheCity: response.name, temp: response.main.temp, temp_min: response.main.temp_min, temp_max: response.main.temp_max, humidity: response.main.humidity, feels_like: response.main.feels_like)
-                
             }
         }
         return cell

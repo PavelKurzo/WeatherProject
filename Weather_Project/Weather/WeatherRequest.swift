@@ -1,6 +1,7 @@
 
 import UIKit
 
+
 struct CityNames {
     let cityName: String
 }
@@ -11,8 +12,8 @@ class WeatherService {
     private let appid = "0058adaff3893eb760cbbf2c877c6e7d"
     
     private func makeUrl(_ method: String, parameter: [URLQueryItem]) -> URL? {
-        var component = URLComponents()
         
+        var component = URLComponents()
         component.scheme = "https"
         component.path = baseUrl + method
         
@@ -47,12 +48,10 @@ class WeatherService {
                 DispatchQueue.main.async {
                     completionHandler?(dataString, weatherResponse)
                 }
-                
             }
         }
         task.resume()
     }
-    
 }
 
 extension UIImageView {
@@ -63,6 +62,7 @@ extension UIImageView {
         }
         setImage(URL(string: "https://openweathermap.org/img/wn/\(iconName)@2x.png"))
     }
+    
     func setImage(_ url: URL?) {
         guard let url = url else {
             image = nil

@@ -47,13 +47,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A803266227D903B400F4EA42 /* ViewControllers */ = {
+		A803266227D903B400F4EA42 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
 				A8648F6727AAF85F00A57039 /* FirstScreenViewController.swift */,
 				A8A7191027B9904700355CB5 /* SecondViewController.swift */,
 			);
-			path = ViewControllers;
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		A803266327D903CF00F4EA42 /* Weather */ = {
@@ -113,7 +113,7 @@
 		A8648F6227AAF85F00A57039 /* Weather_Project */ = {
 			isa = PBXGroup;
 			children = (
-				A803266227D903B400F4EA42 /* ViewControllers */,
+				A803266227D903B400F4EA42 /* Screens */,
 				A803266327D903CF00F4EA42 /* Weather */,
 				A803266527D9043D00F4EA42 /* DataSource */,
 				A803266627D9068900F4EA42 /* Helpers */,

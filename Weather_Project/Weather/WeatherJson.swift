@@ -1,6 +1,7 @@
 
 import UIKit
 
+
 struct Coordinates: Codable {
     let lon: Double
     let lat: Double
@@ -19,6 +20,7 @@ struct MainConditions: Codable {
     let temp_max: Temperature
     let humidity: Int
 }
+
 struct WeatherResponse: Codable {
     let coord: Coordinates
     let weather: [WeatherConditions]

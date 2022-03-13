@@ -5,9 +5,6 @@ import MapKit
 
 class SecondViewController: UIViewController {
     
-    private lazy var locationManager = CLLocationManager()
-    private lazy var mapView = MKMapView()
-    
     @IBOutlet weak var cityNameLabel: UILabel!
     @IBOutlet weak var cityTemptaruteLabel: UILabel!
     @IBOutlet weak var humidityLabel: UILabel!
@@ -15,6 +12,10 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var tempMaxLabel: UILabel!
     @IBOutlet weak var tempMinLabel: UILabel!
     @IBOutlet weak var backMenuButton: UIButton!
+    
+    private lazy var locationManager = CLLocationManager()
+    private lazy var mapView = MKMapView()
+    
     var dataFromApii: WeatherResponseData?
     
     override func viewDidLoad() {
@@ -37,7 +38,6 @@ class SecondViewController: UIViewController {
     }
     
     private func configureLabels() {
-        
         tempMaxLabel.text = "Max temp \(dataFromApii?.temp_max ?? 0.0) °C"
         tempMaxLabel.changeLabelColor()
         tempMinLabel.text = "Min temp \(dataFromApii?.temp_min ?? 0.0) °C"
@@ -48,24 +48,9 @@ class SecondViewController: UIViewController {
         humidityLabel.changeLabelColor()
         cityNameLabel.text = "\(dataFromApii?.nameOfTheCity ?? "Api Error")"
         cityTemptaruteLabel.text = "\(dataFromApii?.temp ?? 0.0) °C"
-        
-    }
-    
-    @IBAction func infoButtonSecondScreen(_ sender: Any) {
-        let alertViewController = UIAlertController(
-            title: "Info",
-            message: "You can scroll down weather parameters",
-            preferredStyle: .alert
-        )
-        alertViewController.addAction(
-            UIAlertAction(title: "Ok", style: .default, handler: { _ in print(#function) })
-        )
-        present(alertViewController, animated: true, completion: nil)
-        
     }
     
     private func configureMap() {
-        
         mapView.showsUserLocation = true
         let coordinate = CLLocationCoordinate2DMake(dataFromApii?.coordLat ?? 0.0, dataFromApii?.coordLong ?? 0.0)
         let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
@@ -76,10 +61,22 @@ class SecondViewController: UIViewController {
                                       pitch: 45,
                                       heading: 200),
                           animated: true)
-        
     }
     
+    @IBAction func showInfoAlert(_ sender: Any) {
+        let alertViewController = UIAlertController(
+            title: "Info",
+            message: "You can scroll down weather parameters",
+            preferredStyle: .alert
+        )
+        alertViewController.addAction(
+            UIAlertAction(title: "Ok", style: .default, handler: { _ in print(#function) })
+        )
+        present(alertViewController, animated: true, completion: nil)
+    }
 }
+
+
 
 extension UIView {
     
@@ -95,15 +92,14 @@ extension UIView {
                 rightAnchor.constraint(equalTo: view.rightAnchor),
             ]
         )
-       
     }
-    
 }
+
 extension UILabel {
     
     func changeLabelColor() {
         backgroundColor = UIColor(white: 0.6, alpha: 0.2)
-        }
+    }
 }
 
 extension SecondViewController: CLLocationManagerDelegate {
@@ -117,7 +113,6 @@ extension SecondViewController: CLLocationManagerDelegate {
         }
     }
     
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         mapView.setCenter(location.coordinate, animated: true)
@@ -126,7 +121,6 @@ extension SecondViewController: CLLocationManagerDelegate {
                                       pitch: 45,
                                       heading: 200),
                           animated: true)
-        
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

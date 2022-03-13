@@ -5,12 +5,10 @@ import UIKit
 class MyProgCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     
-    
     @IBOutlet weak var tempratureLabel: UILabel!
     @IBOutlet weak var conditionLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var iconImageView: UIImageView!
-    
     
     var pan: UIPanGestureRecognizer!
     var deleteLabel1: UILabel!
@@ -59,7 +57,6 @@ class MyProgCell: UICollectionViewCell, UIGestureRecognizerDelegate {
             self.deleteLabel1.frame = CGRect(x: p.x - deleteLabel1.frame.size.width - 10, y: 0, width: 100, height: height)
             self.deleteLabel2.frame = CGRect(x: p.x + width + deleteLabel2.frame.size.width - 30, y: 0, width: 100, height: height)
         }
-        
     }
     
     @objc func doOnPan(_ pan: UIPanGestureRecognizer) {
