@@ -27,7 +27,6 @@ class WeatherService {
     }
     
     func requestWeather(city: CityNames, completionHandler: ((String, WeatherResponse) -> Void)?) {
-        
         let parameters = [
             URLQueryItem(name: "q", value: city.cityName),
             URLQueryItem(name: "lang", value: "eng"),

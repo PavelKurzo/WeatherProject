@@ -6,7 +6,7 @@ struct WeatherResponseData {
     
     let coordLong: Double
     let coordLat: Double
-    var nameOfTheCity: String
+    let nameOfTheCity: String
     let temp: Double
     let temp_min: Double
     let temp_max: Double
@@ -16,6 +16,8 @@ struct WeatherResponseData {
 
 class CollectionDataSource: NSObject, UICollectionViewDataSource {
     
+    private lazy var viewController = ViewController()
+
     var weatherDataDictionary: [IndexPath : WeatherResponseData] = [:]
     var weatherService = WeatherService()
     var cities: [CityNames] = [
@@ -54,11 +56,8 @@ class CollectionDataSource: NSObject, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "myCell", for: indexPath)
         
-        cell.backgroundColor = UIColor(white: 0.6, alpha: 0.2)
-        cell.layer.cornerRadius = 15
-        
         if let cell = cell as? MyProgCell {
-            
+            cell.layer.cornerRadius = 15
             weatherService.requestWeather(city: cities[indexPath.row]) { [ weak self] json, response in
                 let formatted = String(format: "%.0f", response.main.temp)
                 cell.tempratureLabel.text = "\(formatted)°C"
@@ -72,4 +71,7 @@ class CollectionDataSource: NSObject, UICollectionViewDataSource {
         return cell
     }
 }
+
+
+
 

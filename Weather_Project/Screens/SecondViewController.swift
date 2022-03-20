@@ -3,6 +3,7 @@ import UIKit
 import CoreLocation
 import MapKit
 
+
 class SecondViewController: UIViewController {
     
     @IBOutlet weak var cityNameLabel: UILabel!
@@ -11,6 +12,7 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var feelsLikeLabel: UILabel!
     @IBOutlet weak var tempMaxLabel: UILabel!
     @IBOutlet weak var tempMinLabel: UILabel!
+    @IBOutlet weak var formLabels: UILabel!
     @IBOutlet weak var backMenuButton: UIButton!
     
     private lazy var locationManager = CLLocationManager()
@@ -20,11 +22,11 @@ class SecondViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.setGradient(for: view, .systemCyan, .white)
         mapView.pinToEdges(view)
         configureMap()
         configureLabels()
+        changeLabelColor()
         let tap = UITapGestureRecognizer(target: self, action: #selector(returnToPreviousScreen))
         backMenuButton.addGestureRecognizer(tap)
     }
@@ -39,15 +41,18 @@ class SecondViewController: UIViewController {
     
     private func configureLabels() {
         tempMaxLabel.text = "Max temp \(dataFromApii?.temp_max ?? 0.0) °C"
-        tempMaxLabel.changeLabelColor()
         tempMinLabel.text = "Min temp \(dataFromApii?.temp_min ?? 0.0) °C"
-        tempMinLabel.changeLabelColor()
         feelsLikeLabel.text = "Feels like \(dataFromApii?.feels_like ?? 0) °C"
-        feelsLikeLabel.changeLabelColor()
         humidityLabel.text = "Humidity \(dataFromApii?.humidity ?? 0) %"
-        humidityLabel.changeLabelColor()
         cityNameLabel.text = "\(dataFromApii?.nameOfTheCity ?? "Api Error")"
         cityTemptaruteLabel.text = "\(dataFromApii?.temp ?? 0.0) °C"
+    }
+    
+    private func changeLabelColor() {
+        tempMaxLabel.changeColor()
+        tempMinLabel.changeColor()
+        feelsLikeLabel.changeColor()
+        humidityLabel.changeColor()
     }
     
     private func configureMap() {
@@ -70,16 +75,13 @@ class SecondViewController: UIViewController {
             preferredStyle: .alert
         )
         alertViewController.addAction(
-            UIAlertAction(title: "Ok", style: .default, handler: { _ in print(#function) })
+            UIAlertAction(title: "Ok", style: .default)
         )
         present(alertViewController, animated: true, completion: nil)
     }
 }
 
-
-
 extension UIView {
-    
     func pinToEdges(_ view: UIView) {
         view.addSubview(self)
         translatesAutoresizingMaskIntoConstraints = false
@@ -96,14 +98,12 @@ extension UIView {
 }
 
 extension UILabel {
-    
-    func changeLabelColor() {
+    func changeColor() {
         backgroundColor = UIColor(white: 0.6, alpha: 0.2)
     }
 }
 
 extension SecondViewController: CLLocationManagerDelegate {
-    
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
         case .authorizedAlways, .authorizedWhenInUse:

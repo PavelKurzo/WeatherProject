@@ -2,7 +2,7 @@
 import UIKit
 
 
-class MyProgCell: UICollectionViewCell, UIGestureRecognizerDelegate {
+final class MyProgCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     
     @IBOutlet weak var tempratureLabel: UILabel!
@@ -10,6 +10,7 @@ class MyProgCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var iconImageView: UIImageView!
     
+    private lazy var viewContorller = ViewController()
     var pan: UIPanGestureRecognizer!
     var deleteLabel1: UILabel!
     var deleteLabel2: UILabel!
@@ -25,7 +26,6 @@ class MyProgCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     }
     
     private func commonInit() {
-        
         contentView.backgroundColor = UIColor( red: CGFloat(153/255.0), green: CGFloat(204/255.0), blue: CGFloat(255/255.0), alpha: CGFloat(1.0))
         deleteLabel1 = UILabel()
         deleteLabel1.text = "delete"
@@ -48,7 +48,6 @@ class MyProgCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         if (pan.state == UIGestureRecognizer.State.changed) {
             let p: CGPoint = pan.translation(in: self)
             let width = self.contentView.frame.width
@@ -61,7 +60,6 @@ class MyProgCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     @objc func doOnPan(_ pan: UIPanGestureRecognizer) {
         if pan.state == UIGestureRecognizer.State.began {
-            
         } else if pan.state == UIGestureRecognizer.State.changed {
             self.setNeedsLayout()
         } else {

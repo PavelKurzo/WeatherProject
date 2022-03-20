@@ -3,7 +3,6 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var nameForCityTextField: UITextField!
     
@@ -19,7 +18,7 @@ class ViewController: UIViewController {
     }
     
     private func configureTextfield() {
-        nameForCityTextField.backgroundColor = UIColor( red: CGFloat(153/255.0), green: CGFloat(204/255.0), blue: CGFloat(255/255.0), alpha: CGFloat(1.0))
+        nameForCityTextField.backgroundColor = UIColor(red: CGFloat(153/255.0), green: CGFloat(204/255.0), blue: CGFloat(255/255.0), alpha: CGFloat(1.0))
         nameForCityTextField.tintColor  = .black
     }
     
@@ -30,21 +29,29 @@ class ViewController: UIViewController {
         collectionView.delegate = self
     }
     
+    private func showAlertOnError() {
+        let alert = UIAlertController(title: "Error Alert", message: "You already got this city in your list", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     @IBAction func doOnTouchAddingButton(_ sender: Any) {
         self.collectionView.reloadData()
         
-        if let inputCityName = nameForCityTextField.text, inputCityName.isEmpty == false {
+        if let inputCityName = nameForCityTextField.text, inputCityName.isEmpty == false && !collectionDataSource.cities.description.contains(inputCityName) {
             collectionDataSource.cities.append(CityNames(cityName: inputCityName))
+        } else {
+            showAlertOnError()
         }
-        nameForCityTextField.text = nil
         
+        nameForCityTextField.text = nil
         for cities in collectionDataSource.cities {
             
-            collectionDataSource.weatherService.requestWeather(city: CityNames(cityName: "\(cities)")) { [ weak self] json, response in
+            collectionDataSource.weatherService.requestWeather(city: CityNames(cityName: "\(cities)")) { json, response in
             }
         }
+        print(collectionDataSource.cities)
     }
-    
     
     @IBAction func showDeleteAlert(_ sender: Any) {
         let alertViewController = UIAlertController(
@@ -53,10 +60,9 @@ class ViewController: UIViewController {
             preferredStyle: .alert
         )
         alertViewController.addAction(
-            UIAlertAction(title: "Ok", style: .default, handler: { _ in print(#function) })
+            UIAlertAction(title: "Ok", style: .default)
         )
         present(alertViewController, animated: true, completion: nil)
-        
     }
     
     @objc private func handlePullToRefresh(_ sender: UIRefreshControl, _ indexPath: IndexPath) {
@@ -71,6 +77,9 @@ class ViewController: UIViewController {
             collectionDataSource.removeDataFromCell(indexPath)
             self.collectionView.deleteItems(at: [indexPath])
         })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            collectionView.reloadData()
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -83,32 +92,28 @@ extension ViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let SecondViewController = storyBoard.instantiateViewController(withIdentifier: "SecondViewController") as! SecondViewController
-        SecondViewController.dataFromApii = collectionDataSource.weatherDataDictionary[indexPath]
-        self.present(SecondViewController, animated: true, completion:nil)
+        if let SecondViewController = storyBoard.instantiateViewController(withIdentifier: "SecondViewController") as? SecondViewController {
+            SecondViewController.dataFromApii = self.collectionDataSource.weatherDataDictionary[indexPath]
+            self.present(SecondViewController, animated: true, completion:nil)
+        }
     }
 }
 
 extension ViewController: UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         return CGSize(width: view.frame.width - 25, height: view.frame.maxY / 8)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        
         return CGFloat(8)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        
         return CGFloat(10)
     }
 }
 
 extension UIView {
-    
     func setGradient(for view: UIView, _ firstColor: UIColor, _ secondColor: UIColor)  {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [
